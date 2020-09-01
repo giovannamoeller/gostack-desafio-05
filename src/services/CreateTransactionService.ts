@@ -19,9 +19,14 @@ class CreateTransactionService {
     const transactionsRepository = getCustomRepository(TransactionsRepository);
     const categoryRepository = getRepository(Category);
 
+    const { total } = await transactionsRepository.getBalance();
+
     if(type !== 'income' && type !== 'outcome') {
-      console.log('entrou')
       throw new AppError('Type can only be income or outcome', 401);
+    }
+
+    if(type === 'outcome' && value > total) {
+      throw new AppError('Outcome cannot be higher than income.', 400);
     }
 
     let findCategory = await categoryRepository.findOne({where: {title: category}});
@@ -33,16 +38,18 @@ class CreateTransactionService {
       await categoryRepository.save(findCategory);
     }
 
-    const transaction = transactionsRepository.create({
+    await transactionsRepository.getBalance();
+
+    const newTransaction = transactionsRepository.create({
       title,
       value,
       type,
       category: findCategory
     });
 
-    await transactionsRepository.save(transaction)
+    await transactionsRepository.save(newTransaction)
 
-    return transaction
+    return newTransaction
 
   }
 }

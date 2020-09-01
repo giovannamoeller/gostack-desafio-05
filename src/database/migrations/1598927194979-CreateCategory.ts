@@ -5,7 +5,7 @@ export class CreateCategory1598926678811 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<any> {
       await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
       await queryRunner.createTable(new Table({
-        name: 'category',
+        name: 'categories',
         columns: [
           {
             name: 'id',
@@ -33,7 +33,7 @@ export class CreateCategory1598926678811 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-      await queryRunner.dropTable('category');
+      await queryRunner.dropTable('categories');
     }
 
 }

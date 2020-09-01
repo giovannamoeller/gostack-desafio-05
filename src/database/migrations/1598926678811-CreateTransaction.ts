@@ -49,7 +49,7 @@ export class CreateTransaction1598927194979 implements MigrationInterface {
         name: 'CategoryId',
         columnNames: ['category_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'category',
+        referencedTableName: 'categories',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       }))
