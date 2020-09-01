@@ -20,34 +20,27 @@ class CreateTransactionService {
     const categoryRepository = getRepository(Category);
 
     if(type !== 'income' && type !== 'outcome') {
+      console.log('entrou')
       throw new AppError('Type can only be income or outcome', 401);
     }
 
-    const findCategory = await categoryRepository.findOne({where: {title: category}});
-    let categoryId;
+    let findCategory = await categoryRepository.findOne({where: {title: category}});
 
     if(!findCategory) {
-      const newCategory = categoryRepository.create({
+      findCategory = categoryRepository.create({
         title: category
       });
-      await categoryRepository.save(newCategory);
-      categoryId = newCategory.id;
-    } else {
-      categoryId = findCategory.id;
+      await categoryRepository.save(findCategory);
     }
-
-    console.log(categoryId)
 
     const transaction = transactionsRepository.create({
       title,
       value,
       type,
-      category_id: categoryId
+      category: findCategory
     });
 
     await transactionsRepository.save(transaction)
-
-
 
     return transaction
 
