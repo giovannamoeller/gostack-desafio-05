@@ -4,6 +4,7 @@ import { Router } from 'express';
 import CreateTransactionService from '../services/CreateTransactionService';
 import { getCustomRepository } from 'typeorm';
 import TransactionsRepository from '../repositories/TransactionsRepository';
+import DeleteTransactionService from '../services/DeleteTransactionService';
 // import DeleteTransactionService from '../services/DeleteTransactionService';
 // import ImportTransactionsService from '../services/ImportTransactionsService';
 
@@ -35,7 +36,12 @@ transactionsRouter.post('/', async (request, response) => {
 });
 
 transactionsRouter.delete('/:id', async (request, response) => {
-  // TODO
+
+  const { id } = request.params;
+
+  await new DeleteTransactionService().execute(id);
+
+  return response.status(204).send();
 });
 
 transactionsRouter.post('/import', async (request, response) => {
